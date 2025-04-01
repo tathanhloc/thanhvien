@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh Sách Thành Viên Câu Lạc Bộ</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #3f37c9;
+      --accent: #f72585;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --danger: #f94144;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --gray-light: #dee2e6;
+      --gray-dark: #343a40;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: all 0.3s ease;
+      
+      /* Light mode variables */
+      --body-bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --text-color: var(--dark);
+      --text-muted: var(--gray);
+      --item-bg: #f8f9fa;
+      --item-hover: #f0f4f8;
+    }
+    
+    /* Dark mode theme */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --body-bg: #121212;
+        --card-bg: #1e1e1e;
+        --text-color: #e0e0e0;
+        --text-muted: #a0a0a0;
+        --item-bg: #2a2a2a;
+        --item-hover: #333333;
+        --gray-light: #444444;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+      }
+    }
+    
+    /* Manual dark mode override */
+    [data-theme="dark"] {
+      --body-bg: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #e0e0e0;
+      --text-muted: #a0a0a0;
+      --item-bg: #2a2a2a;
+      --item-hover: #333333;
+      --gray-light: #444444;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Manual light mode override */
+    [data-theme="light"] {
+      --body-bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --text-color: var(--dark);
+      --text-muted: var(--gray);
+      --item-bg: #f8f9fa;
+      --item-hover: #f0f4f8;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--body-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+      transition: var(--transition);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      width: 100%;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Theme toggle switch */
+    .theme-switch-wrapper {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .theme-switch {
+      display: inline-block;
+      position: relative;
+      width: 50px;
+      height: 24px;
+    }
+
+    .theme-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.5);
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+      background-color: #333;
+    }
+
+    .slider .icon {
+      position: absolute;
+      top: 4px;
+      font-size: 16px;
+    }
+
+    .slider .sun {
+      left: 6px;
+      color: #ff9800;
+    }
+
+    .slider .moon {
+      right: 6px;
+      color: #f0f0f0;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+      transform: rotate(30deg);
+      z-index: 0;
+    }
+
+    header > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+    }
+
+    /* Search and Filter Styles */
+    .search-filter-container {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.7rem 1rem 0.7rem 2.5rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-light);
+      background: var(--item-bg);
+      color: var(--text-color);
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    }
+
+    .search-box:before {
+      content: '🔍';
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .filter-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-button {
+      background-color: var(--item-bg);
+      color: var(--text-color);
+      border: 1px solid var(--gray-light);
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-button:hover {
+      background-color: var(--item-hover);
+    }
+
+    .filter-button.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Members Table Styles */
+    .members-container {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .members-container h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: var(--text-color);
+      font-size: 1.5rem;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+
+    .members-container h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    .members-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    .members-table th,
+    .members-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .members-table th {
+      background-color: var(--primary);
+      color: white;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .members-table th:first-child {
+      border-top-left-radius: var(--radius-sm);
+    }
+
+    .members-table th:last-child {
+      border-top-right-radius: var(--radius-sm);
+    }
+
+    .members-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .members-table tr:hover td {
+      background-color: var(--item-hover);
+    }
+
+    .members-table tr:nth-child(even) {
+      background-color: var(--item-bg);
+    }
+
+    .member-id {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .member-name {
+      font-weight: 500;
+    }
+
+    .member-class {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .member-faculty {
+      color: var(--secondary);
+    }
+
+    .member-note {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Pagination Styles */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+      gap: 0.5rem;
+    }
+
+    .pagination-button {
+      background-color: var(--item-bg);
+      color: var(--text-color);
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .pagination-button:hover {
+      background-color: var(--item-hover);
+    }
+
+    .pagination-button.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .pagination-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Loading indicator */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      width: 100%;
+    }
+
+    .loading-spinner {
+      border: 4px solid var(--gray-light);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* No results style */
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .no-results i {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    /* Export button */
+    .export-button {
+      background-color: var(--success);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .export-button:hover {
+      background-color: #3ab7db;
+      transform: translateY(-2px);
+    }
+
+    /* Notification Styles */
+    .notification-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      width: 300px;
+      max-width: 90vw;
+    }
+
+    .notification {
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: flex-start;
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+      border-left: 4px solid var(--primary);
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification-icon {
+      margin-right: 0.8rem;
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+
+    .notification-content {
+      flex: 1;
+    }
+
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      font-size: 0.95rem;
+      color: var(--text-color);
+    }
+
+    .notification-message {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .notification-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0.2rem;
+      line-height: 1;
+    }
+
+    .notification.success {
+      border-left-color: var(--success);
+    }
+
+    .notification.success .notification-icon {
+      color: var(--success);
+    }
+
+    .notification.warning {
+      border-left-color: var(--warning);
+    }
+
+    .notification.warning .notification-icon {
+      color: var(--warning);
+    }
+
+    .notification.error {
+      border-left-color: var(--danger);
+    }
+
+    .notification.error .notification-icon {
+      color: var(--danger);
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      header {
+        padding: 1.5rem;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .search-filter-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .filter-controls {
+        justify-content: center;
+      }
+      
+      .members-container {
+        padding: 1rem;
+      }
+      
+      .members-table th,
+      .members-table td {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+      }
+      
+      .pagination {
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .subtitle {
+        font-size: 0.9rem;
+      }
+      
+      .members-container h2 {
+        font-size: 1.3rem;
+      }
+      
+      .export-button {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <!-- Dark mode toggle switch -->
+      <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+          <input type="checkbox" id="checkbox" />
+          <div class="slider">
+            <span class="icon sun">☀️</span>
+            <span class="icon moon">🌙</span>
+          </div>
+        </label>
+      </div>
+      <h1>Danh Sách Thành Viên Câu Lạc Bộ</h1>
+      <div class="subtitle">Thông tin từ cơ sở dữ liệu Google Sheets</div>
+    </header>
+
+    <!-- Search and Filter Section -->
+    <div class="search-filter-container">
+      <div class="search-box">
+        <input type="text" id="member-search" placeholder="Tìm kiếm thành viên..." autocomplete="off">
+      </div>
+      <div class="filter-controls">
+        <button class="filter-button active" data-filter="all">Tất cả</button>
+        <button class="filter-button" data-filter="khoa">Theo khoa</button>
+        <button class="filter-button" data-filter="lop">Theo lớp</button>
+        <button class="export-button" id="export-excel">
+          <i class="fas fa-file-excel"></i> Xuất Excel
+        </button>
+      </div>
+    </div>
+
+    <!-- Members List -->
+    <div class="members-container">
+      <h2>Danh Sách Thành Viên</h2>
+      <div id="members-content">
+        <div class="loading">
+          <div class="loading-spinner"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification Container -->
+  <div class="notification-container" id="notification-container"></div>
+
+  <!-- Scripts -->
+  <script>
+    // Check for system dark mode preference
+    function getSystemThemePreference() {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    
+    // Dark mode toggle functionality
+    const toggleSwitch = document.querySelector('#checkbox');
+    
+    // Set initial theme based on system preference or saved preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemTheme = getSystemThemePreference();
+    const currentTheme = savedTheme || systemTheme;
+    
+    // Apply initial theme
+    if (currentTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      toggleSwitch.checked = true;
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      toggleSwitch.checked = false;
+    }
+    
+    // Toggle between light and dark mode
+    function switchTheme(e) {
+      if (e.target.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+      }
+    }
+    
+    toggleSwitch.addEventListener('change', switchTheme);
+    
+    // Google Sheet settings
+    const SPREADSHEET_ID = "10g9eoH4H_PhL181RoAPCTxsIsYzsr-T9diM2yexXzc4";
+    const API_KEY = "AIzaSyDlSWqWDoTHK3V-pRqMyu6GKMl1-tNZrYw";
+    const SHEET_NAME = "Trang tính2";
+    const RANGE = "A1:F1000"; // Phạm vi dữ liệu cần lấy
+    
+    // Store members data
+    let membersData = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let currentFilter = 'all';
+    let searchTerm = '';
+    
+    // Fetch data from Google Sheets
+    async function fetchMembersData() {
+      try {
+        // Create API URL
+        const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}!${RANGE}?key=${API_KEY}`;
+        
+        // Call API
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.values && data.values.length > 0) {
+          // Get headers from the first row
+          const headers = data.values[0];
+          
+          // Initialize members array
+          membersData = [];
+          
+          // Parse data from row 2 onwards (skip header row)
+          for (let i = 1; i < data.values.length; i++) {
+            const row = data.values[i];
+            
+            // Skip if row doesn't have enough data
+            if (row.length < 3) continue;
+            
+            // Create member object
+            const member = {
+              stt: row[0] || '',
+              mssv: row[1] || '',
+              name: row[2] || '',
+              class: row[3] || '',
+              faculty: row[4] || '',
+              note: row[5] || ''
+            };
+            
+            membersData.push(member);
+          }
+          
+          console.log('Successfully fetched data:', membersData.length, 'members');
+          
+          // Update the UI
+          updateMembersTable();
+          
+          // Show success notification
+          showNotification('Dữ liệu đã tải xong', 'Đã kết nối thành công với Google Sheets!', 'success');
+          
+          return true;
+        } else {
+          throw new Error('No data found in Google Sheets');
+        }
+      } catch (error) {
+        console.error('Error fetching data from Google Sheets:', error);
+        
+        // Show error notification
+        showNotification('Lỗi kết nối', `Không thể lấy dữ liệu: ${error.message}`, 'error');
+        
+        // Display error in the UI
+        document.getElementById('members-content').innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-exclamation-triangle"></i>
+            Không thể tải dữ liệu. Vui lòng thử lại sau.
+          </div>
+        `;
+        
+        return false;
+      }
+    }
+    
+    // Update members table with pagination
+    function updateMembersTable() {
+      const membersContent = document.getElementById('members-content');
+      
+      // Apply filters and search
+      const filteredMembers = filterMembers();
+      
+      // Calculate pagination
+      const totalPages = Math.ceil(filteredMembers.length / itemsPerPage);
+      
+      // Adjust current page if needed
+      if (currentPage > totalPages && totalPages > 0) {
+        currentPage = totalPages;
+      }
+      
+      // Calculate start and end indices
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, filteredMembers.length);
+      
+      // Get current page members
+      const currentMembers = filteredMembers.slice(startIndex, endIndex);
+      
+      // If no members found
+      if (filteredMembers.length === 0) {
+        membersContent.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-search"></i>
+            Không tìm thấy thành viên phù hợp với bộ lọc hiện tại
+          </div>
+        `;
+        return;
+      }
+      
+      // Create table
+      let tableHTML = `
+        <div class="table-responsive">
+          <table class="members-table">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>MSSV</th>
+                <th>Họ và tên</th>
+                <th>Lớp</th>
+                <th>Khoa</th>
+                <th>Ghi chú</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+      
+      // Add rows for current page
+      currentMembers.forEach(member => {
+        tableHTML += `
+          <tr>
+            <td>${member.stt}</td>
+            <td class="member-id">${member.mssv}</td>
+            <td class="member-name">${member.name}</td>
+            <td class="member-class">${member.class}</td>
+            <td class="member-faculty">${member.faculty}</td>
+            <td class="member-note">${member.note}</td>
+          </tr>
+        `;
+      });
+      
+      tableHTML += `
+            </tbody>
+          </table>
+        </div>
+      `;
+      
+      // Add pagination if needed
+      if (totalPages > 1) {
+        tableHTML += `<div class="pagination">`;
+        
+        // Previous button
+        tableHTML += `
+          <button class="pagination-button" 
+            ${currentPage === 1 ? 'disabled' : ''} 
+            onclick="changePage(${currentPage - 1})">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        `;
+        
+        // Page number buttons
+        const maxButtons = 5;
+        const startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+        const endPage = Math.min(totalPages, startPage + maxButtons - 1);
+        
+        for (let i = startPage; i <= endPage; i++) {
+          tableHTML += `
+            <button class="pagination-button ${i === currentPage ? 'active' : ''}"
+              onclick="changePage(${i})">
+              ${i}
+            </button>
+          `;
+        }
+        
+        // Next button
+        tableHTML += `
+          <button class="pagination-button" 
+            ${currentPage === totalPages ? 'disabled' : ''} 
+            onclick="changePage(${currentPage + 1})">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        `;
+        
+        tableHTML += `</div>`;
+      }
+      
+      // Update content
+      membersContent.innerHTML = tableHTML;
+    }
+    
+    // Change page function
+    function changePage(page) {
+      currentPage = page;
+      updateMembersTable();
+      
+      // Scroll to top of table
+      document.querySelector('.members-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    // Filter members based on current filter and search term
+    function filterMembers() {
+      let filtered = [...membersData];
+      
+      // Apply search term
+      if (searchTerm.trim() !== '') {
+        const term = searchTerm.toLowerCase();
+        filtered = filtered.filter(member => 
+          member.mssv.toLowerCase().includes(term) ||
+          member.name.toLowerCase().includes(term) ||
+          member.class.toLowerCase().includes(term) ||
+          member.faculty.toLowerCase().includes(term) ||
+          member.note.toLowerCase().includes(term)
+        );
+      }
+      
+      // Apply filter
+      if (currentFilter === 'khoa') {
+        // Group by faculty - we return all members but sort them by faculty
+        filtered.sort((a, b) => a.faculty.localeCompare(b.faculty));
+      } else if (currentFilter === 'lop') {
+        // Group by class - we return all members but sort them by class
+        filtered.sort((a, b) => a.class.localeCompare(b.class));
+      }
+      
+      return filtered;
+    }
+    
+    // Search and filter event handling
+    document.getElementById('member-search').addEventListener('input', function(e) {
+      searchTerm = e.target.value;
+      currentPage = 1; // Reset to first page
+      updateMembersTable();
+    });
+    
+    // Filter buttons
+    const filterButtons = document.querySelectorAll('.filter-button:not(#export-excel)');
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Update current filter
+        currentFilter = this.dataset.filter;
+        
+        // Reset to first page
+        currentPage = 1;
+        
+        // Update table
+        updateMembersTable();
+      });
+    });
+    
+    // Export to Excel functionality
+    document.getElementById('export-excel').addEventListener('click', function() {
+      exportToExcel();
+    });
+    
+    function exportToExcel() {
+      // Get filtered data
+      const filteredMembers = filterMembers();
+      
+      // If no data, show notification
+      if (filteredMembers.length === 0) {
+        showNotification('Không có dữ liệu', 'Không có dữ liệu để xuất ra Excel', 'warning');
+        return;
+      }
+      
+      // Create CSV content
+      let csvContent = 'STT,MSSV,Họ và tên,Lớp,Khoa,Ghi chú\n';
+      
+      filteredMembers.forEach(member => {
+        csvContent += `${member.stt},${member.mssv},"${member.name}",${member.class},${member.faculty},"${member.note}"\n`;
+      });
+      
+      // Create download link
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'danh_sach_thanh_vien.csv');
+      document.body.appendChild(link);
+      
+      // Trigger download
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      
+      // Show notification
+      showNotification('Xuất dữ liệu thành công', 'Dữ liệu đã được xuất ra tệp CSV', 'success');
+    }
+    
+    // Notification system
+    function showNotification(title, message, type = 'info', duration = 3000) {
+      const container = document.getElementById('notification-container');
+      
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      
+      // Set icon based on type
+      let icon = 'info-circle';
+      if (type === 'success') icon = 'check-circle';
+      if (type === 'warning') icon = 'exclamation-triangle';
+      if (type === 'error') icon = 'exclamation-circle';
+      
+      notification.innerHTML = `
+        <div class="notification-icon">
+          <i class="fas fa-${icon}"></i>
+        </div>
+        <div class="notification-content">
+          <div class="notification-title">${title}</div>
+          <div class="notification-message">${message}</div>
+        </div>
+        <button class="notification-close">&times;</button>
+      `;
+      
+      // Add to container
+      container.appendChild(notification);
+      
+      // Show animation
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 10);
+      
+      // Add close button listener
+      const closeBtn = notification.querySelector('.notification-close');
+      closeBtn.addEventListener('click', () => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          container.removeChild(notification);
+        }, 300);
+      });
+      
+      // Auto close after duration
+      if (duration > 0) {
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.classList.remove('show');
+            setTimeout(() => {
+              if (notification.parentNode) {
+                container.removeChild(notification);
+              }
+            }, 300);
+          }
+        }, duration);
+      }
+      
+      return notification;
+    }
+    
+    // Initialize the application
+    async function initialize() {
+      // Show loading notification
+      const loadingNotification = showNotification(
+        'Đang tải dữ liệu',
+        'Đang kết nối với Google Sheets...',
+        'info',
+        0 // No auto close
+      );
+      
+      // Fetch data
+      const success = await fetchMembersData();
+      
+      // Remove loading notification
+      loadingNotification.classList.remove('show');
+      setTimeout(() => {
+        if (loadingNotification.parentNode) {
+          loadingNotification.parentNode.removeChild(loadingNotification);
+        }
+      }, 300);
+    }
+    
+    // Make changePage function global so it can be called from HTML
+    window.changePage = changePage;
+    
+    // Start the application
+    initialize();
+  </script>
+</body>
+</html>
